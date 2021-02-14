@@ -1,0 +1,24 @@
+mvn -Dquarkus-profile=me compile quarkus:dev -Ddebug=5005 
+mvn -Dquarkus-profile=you compile quarkus:dev -Ddebug=5006
+mvn -Dquarkus-profile=them compile quarkus:dev -Ddebug=5007
+
+curl http://localhost:8080/blockchain/get_chain | jq
+curl http://localhost:8081/blockchain/get_chain | jq
+curl http://localhost:8082/blockchain/get_chain | jq
+
+curl -sX POST http://localhost:8080/blockchain/connect_node -d @nodes-me.json --header "Content-Type: application/json" | jq
+curl -sX POST http://localhost:8081/blockchain/connect_node -d @nodes-you.json --header "Content-Type: application/json" | jq
+curl -sX POST http://localhost:8082/blockchain/connect_node -d @nodes-them.json --header "Content-Type: application/json" | jq
+
+curl http://localhost:8080/blockchain/mine_block | jq
+
+curl http://localhost:8080/blockchain/get_chain | jq
+curl http://localhost:8081/blockchain/get_chain | jq
+curl http://localhost:8082/blockchain/get_chain | jq
+
+curl http://localhost:8080/blockchain/replace_chain 
+curl http://localhost:8081/blockchain/replace_chain 
+curl http://localhost:8082/blockchain/replace_chain 
+
+curl -sX POST http://localhost:8080/blockchain/add_transaction -d @tx-me2you.json --header "Content-Type: application/json"
+curl -sX POST http://localhost:8080/blockchain/add_transaction -d @tx-me2them.json --header "Content-Type: application/json"
